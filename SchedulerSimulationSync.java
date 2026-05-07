@@ -68,13 +68,17 @@ class SharedResources {
     public static void incrementCompletedProcess() {
         // TODO: Protect this critical section with a lock
         counterLock.lock();
-         counterLock.lock();
-try {
-    completedProcessCount++;
-} finally {
-    counterLock.unlock();
+        // Method to increment completed process counter
 
+    counterLock.lock();
+    try {
+        completedProcessCount++;
+    } finally {
+        counterLock.unlock();
+    }
 }
+        
+
     
     // Method to add waiting time
     public static void addWaitingTime(long time) {
@@ -91,7 +95,12 @@ try {
     public static void logExecution(String message) {
         // TODO: Protect this critical section with a lock
         // RACE CONDITION: ArrayList is not thread-safe!
-        executionLog.add(message);
+       logLock.lock();
+try {
+    executionLog.add(message);
+} finally {
+    logLock.unlock();
+}
     }
 }
 
